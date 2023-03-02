@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Our Books";
+}
+
+@model BooksViewModel
+
+<center>
+    <h1>Welcome to the Banana Bread Bookstore</h1>
+    <h3>Browse Our Books Below!</h3>
+</center>
+
+@foreach (var b in Model.Books)
+{
+    <div class="card card-outline-primary m-1 p-1">
+        <div class="bg-faded p-1">
+            <h4>
+                @b.Title
+                <span class="badge badge-pill badge-primary" style="float:right">
+                    <small>@b.Price.ToString("c")</small>
+                </span>
+            </h4>
+            <span>By: @b.Author</span><br />
+            <span>Published By: @b.Publisher</span><br />
+            <span>@b.Classification/@b.Category</span>
+            <span style="float:right">ISBN: @b.Isbn</span><br />
+            <span style="float:right">Pages: @b.PageCount</span>
+        </div>
+    </div>
+}
+
+@*<div page-numbers="@Model.PageInfo" page-action="Index"></div>*@
+
+<div page-numbers="@Model.PageInfo" page-action="Index" page-classes-enabled="true"
+     page-class="btn" page-class-normal="btn-outline-dark"
+     page-class-selected="btn-primary" class="btn-group pull-right m-1 ">
+</div>
