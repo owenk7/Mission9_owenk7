@@ -49,12 +49,15 @@ namespace Mission9_owenk7.Models
                 TagBuilder tb = new TagBuilder("a");
 
                 tb.Attributes["href"] = uh.Action(PageAction, new { pageNum = i });
+                tb.AddCssClass(PageClass);
+
                 if (PageClassesEnabled)
                 {
                     tb.AddCssClass(PageClass);
                     tb.AddCssClass(i == PageNumbers.currentPage
                         ? PageClassSelected : PageClassNormal);
                 }
+
                 tb.InnerHtml.Append(i.ToString());
 
                 final.InnerHtml.AppendHtml(tb);

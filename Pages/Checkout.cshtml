@@ -1,0 +1,92 @@
+﻿@page
+@model Mission9_owenk7.Pages.CheckoutModel
+@{
+}
+
+<h2>Your Cart: </h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Book</th>
+            <th>Quantity</th>
+            <th>Cost</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var i in Model.cart.Items)
+        {
+            <tr>
+                <td>@i.Book.Title</td>
+                <td>@i.Quantity</td>
+                <td>$@i.Book.Price</td>
+                <td>$@(i.Quantity * i.Book.Price)</td>
+            </tr>
+        }
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="3">Total: </td>
+            <td>
+                @Model.cart.CalcTotal().ToString("c")
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<div class="progress" style="margin-bottom: 10px;">
+    @if (Model.cart.CalcTotal() >= 50)
+    {
+        <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="@Model.cart.CalcTotal()" aria-valuemin="0" aria-valuemax="50">You qualify for free shipping!</div>
+    }
+    else
+    {
+        <div class="progress-bar" role="progressbar" style="width: @(Math.Floor((Model.cart.CalcTotal() / 50) * 100))%" aria-valuenow="@Model.cart.CalcTotal()" aria-valuemin="0" aria-valuemax="50">@Math.Floor((Model.cart.CalcTotal() / 50) * 100)%</div>
+    }
+</div>
+
+@if (Model.cart.CalcTotal() < 50)
+{
+    <p>Only @Model.cart.AmountToReachFreeShipping().ToString("c") left to reach free shipping!</p>
+}
+
+<div>
+    <div class="text-center">
+        <a class="btn btn-primary" href="@Model.ReturnUrl">Continue Shopping</a>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function() {
+            // get the progress bar element
+            var progressBar = $(".progress-bar");
+
+            // get the total value and round it to 2 decimal places
+            var total = parseFloat("@Model.cart.CalcTotal()").toFixed(2);
+
+            // check if the total value is equal to or greater than 50
+            if (total >= 50) {
+                // set the progress bar to 100% and display the free shipping message
+                progressBar.width("100%");
+                progressBar.text("You qualify for free shipping!");
+            } else {
+                // calculate the percentage value rounded to 0 decimal places
+                var percentage = Math.floor((total / 50) * 100);
+
+                // set the width of the progress bar based on the percentage value
+                progressBar.width(percentage + "%");
+
+                // set the text of the progress bar to the percentage value
+                progressBar.text(percentage + "%");
+
+                // add the amount needed for free shipping next to the progress bar
+                var remaining = (50 - total).toFixed(2);
+                $(".amount-needed").text("$" + remaining + " needed for free shipping");
+            }
+        });
+    </script>
+}

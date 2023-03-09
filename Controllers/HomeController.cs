@@ -19,20 +19,23 @@ namespace Mission9_owenk7.Controllers
             Repository = repository;
         }
 
-        public IActionResult Index(int pageNum = 1)
+        public IActionResult Index(string bookCategory, int pageNum = 1)
         {
             int numBooks = 10;
 
             var x = new BooksViewModel
             {
                 Books = Repository.Books
+                .Where(b => b.Category == bookCategory || bookCategory == null)
                 .OrderBy(b => b.Title)
                 .Skip((pageNum - 1) * numBooks)
                 .Take(numBooks),
 
                 PageInfo = new PageInfo
                 {
-                    totalBooks = Repository.Books.Count(),
+                    totalBooks = (bookCategory == null
+                        ? Repository.Books.Count()
+                        : Repository.Books.Where(x => x.Category == bookCategory).Count()),
                     booksPerPage = numBooks,
                     currentPage = pageNum
                 }

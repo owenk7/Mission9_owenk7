@@ -31,18 +31,10 @@
             </div>
         </nav>
     </header>
-
-    <div class="row m-1 p-1">
-        <div class="container col-3">
-            <p>Filter Here: </p>
-            <vc:category></vc:category>
-        </div>
-        <div class="container col-md-9">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
-        </div>
+    <div class="m-1 p-1">
+        @RenderBody()
     </div>
+
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2023 - Mission9_owenk7 - <a asp-area="" asp-controller="Home" asp-action="About">About Us</a>
