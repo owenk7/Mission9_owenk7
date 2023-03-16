@@ -23,6 +23,14 @@
                 <td>@i.Quantity</td>
                 <td>$@i.Book.Price</td>
                 <td>$@(i.Quantity * i.Book.Price)</td>
+
+                <td class="text-center">
+                    <form method="post" asp-page-handler="Remove">
+                        <input type="hidden" name="bookId" value="@i.Book.BookId" />
+                        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+                        <button class="btn btn-sm btn-danger" type="submit">Remove @i.Book.Title</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>
@@ -44,18 +52,21 @@
     }
     else
     {
-        <div class="progress-bar" role="progressbar" style="width: @(Math.Floor((Model.cart.CalcTotal() / 50) * 100))%" aria-valuenow="@Model.cart.CalcTotal()" aria-valuemin="0" aria-valuemax="50">@Math.Floor((Model.cart.CalcTotal() / 50) * 100)%</div>
+        <div class="progress-bar" role="progressbar" style="width: @(Math.Floor(Model.cart.CalcTotal() / 50) * 100) " %" aria-valuenow="@Model.cart.CalcTotal()" aria-valuemin="0" aria-valuemax="50">@Math.Floor((Model.cart.CalcTotal() / 50) * 100)%</div>
     }
 </div>
 
 @if (Model.cart.CalcTotal() < 50)
 {
-    <p>Only @Model.cart.AmountToReachFreeShipping().ToString("c") left to reach free shipping!</p>
+    <center>
+        <p>Only @Model.cart.AmountToReachFreeShipping().ToString("c") left to reach free shipping!</p>
+    </center>
 }
 
 <div>
     <div class="text-center">
         <a class="btn btn-primary" href="@Model.ReturnUrl">Continue Shopping</a>
+        <a class="btn btn-primary" asp-action="Purchase" asp-controller="Purchase">Proceed to Checkout</a>
     </div>
 </div>
 

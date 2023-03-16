@@ -12,19 +12,18 @@ namespace Mission9_owenk7.Pages
     {
         private IBookstoreRepository repository { get; set; }
 
-        public CheckoutModel(IBookstoreRepository temp)
+        public Cart cart { get; set; }
+        public string ReturnUrl { get; set; }
+
+        public CheckoutModel(IBookstoreRepository temp, Cart c)
         {
             repository = temp;
+            cart = c;
         }
-
-        public Cart cart { get; set; }
-
-        public string ReturnUrl { get; set; }
 
         public void OnGet(string returnUrl)
         {
             ReturnUrl = returnUrl ?? "/";
-            cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
         }
 
         public IActionResult OnPost(int bookId, string returnUrl)
@@ -32,11 +31,15 @@ namespace Mission9_owenk7.Pages
             Book b = repository.Books.FirstOrDefault(x => x.BookId == bookId);
 
             // evaluate left first ??
-            cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
 
             cart.AddItem(b, 1);
 
-            HttpContext.Session.SetJson("cart", cart);
+            return RedirectToPage(new { ReturnUrl = returnUrl });
+        }
+
+        public IActionResult OnPostRemove(int bookId, string returnUrl)
+        {
+            cart.RemoveItem(cart.Items.First(x => x.Book.BookId == bookId).Book);
 
             return RedirectToPage(new { ReturnUrl = returnUrl });
         }
